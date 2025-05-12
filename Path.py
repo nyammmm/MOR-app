@@ -18,8 +18,7 @@ default_addresses = [
     "SM City Taytay, Taytay, Rizal, Philippines",
     "SM City Masinag, Antipolo, Rizal, Philippines",
     "Robinsons Place Antipolo, Antipolo, Rizal, Philippines",
-    "Sta. Lucia East Grand Mall, Cainta, Rizal, Philippines",
-    "SM City San Mateo, San Mateo, Rizal, Philippines"
+    "Sta. Lucia East Grand Mall, Cainta, Rizal, Philippines"
 ]
 
 addresses = []

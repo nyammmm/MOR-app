@@ -7,7 +7,7 @@ from ortools.constraint_solver import pywrapcp
 from math import radians, sin, cos, sqrt, atan2
 
 st.set_page_config(layout="wide")
-st.title("📦 Delivery Route Optimization")
+st.title("📦 Optimal Delivery Route in Rizal")
 
 # Sidebar layout split into two columns
 with st.sidebar:
@@ -22,7 +22,11 @@ sample_addresses = [
     "SM City Taytay, Taytay, Rizal, Philippines",
     "SM City Masinag, Antipolo, Rizal, Philippines",
     "Robinsons Place Antipolo, Antipolo, Rizal, Philippines",
-    "Sta. Lucia East Grand Mall, Cainta, Rizal, Philippines"
+    "Sta. Lucia East Grand Mall, Cainta, Rizal, Philippines",
+    "SM City East Ortigas, Pasig, Philippines",
+    "SM Center Angono, Angono, Rizal, Philippines",
+    "SM City Marikina, Marikina, Philippines",
+    "Robinsons Place Cainta, Cainta, Rizal, Philippines"
 ]
 
 sample_coords = [
@@ -31,6 +35,10 @@ sample_coords = [
     (14.6211, 121.1233),  # SM Masinag
     (14.5869, 121.1755),  # Robinsons Antipolo
     (14.6082, 121.1110),  # Sta Lucia East
+    (14.5948, 121.1020),  # SM East Ortigas
+    (14.5255, 121.1516),  # SM Center Angono
+    (14.6507, 121.0855),  # SM Marikina
+    (14.5767, 121.1226)   # Robinsons Cainta
 ]
 
 if "reset_requested" not in st.session_state:

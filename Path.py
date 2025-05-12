@@ -70,7 +70,7 @@ for i in range(num_locations):
 def haversine(coord1, coord2):
     R = 6371.0
     lat1, lon1 = radians(coord1[0]), radians(coord1[1])
-    lat2, lon2 = radians(coord2[0]), coord2[1]
+    lat2, lon2 = radians(coord2[0]), radians(coord2[1])
     dlon = lon2 - lon1
     dlat = lat2 - lat1
 

@@ -125,45 +125,45 @@ if len(coords) >= 2:
     route_indices, total_distance = solve_tsp(distance_matrix)
 
    if route_indices:
-        st.subheader("📦 Optimal Route")
-    
-        for idx, i in enumerate(route_indices):
-            if idx == 0:
-                st.markdown(f"**{idx+1}.** 🏢 **Warehouse**: {addresses[i]}")
-            elif idx == len(route_indices) - 1:
-                st.markdown(f"**{idx+1}.** 🔁 Return to Warehouse: {addresses[i]}")
-            else:
-                st.markdown(f"**{idx+1}.** 📍 Stop {idx}: {addresses[i]}")
-    
-        st.success(f"🚗 Total Distance: {total_distance:.2f} km")
-    
-        # Folium Map with special markers
-        m = folium.Map(location=coords[0], zoom_start=11)
-    
-        for idx, i in enumerate(route_indices):
-            if idx == 0:
-                folium.Marker(
-                    coords[i],
-                    tooltip=f"{idx+1}: Warehouse",
-                    popup=addresses[i],
-                    icon=folium.Icon(color="green", icon="home", prefix="fa")
-                ).add_to(m)
-            elif idx == len(route_indices) - 1:
-                folium.Marker(
-                    coords[i],
-                    tooltip=f"{idx+1}: Return to Warehouse",
-                    popup=addresses[i],
-                    icon=folium.Icon(color="red", icon="undo", prefix="fa")
-                ).add_to(m)
-            else:
-                folium.Marker(
-                    coords[i],
-                    tooltip=f"{idx+1}: Stop {idx}",
-                    popup=addresses[i],
-                    icon=folium.Icon(color="blue", icon="map-marker", prefix="fa")
-                ).add_to(m)
-    
-            st_folium(m, width=700, height=500)
+    st.subheader("📦 Optimal Route")
+
+    for idx, i in enumerate(route_indices):
+        if idx == 0:
+            st.markdown(f"**{idx+1}.** 🏢 **Warehouse**: {addresses[i]}")
+        elif idx == len(route_indices) - 1:
+            st.markdown(f"**{idx+1}.** 🔁 Return to Warehouse: {addresses[i]}")
+        else:
+            st.markdown(f"**{idx+1}.** 📍 Stop {idx}: {addresses[i]}")
+
+    st.success(f"🚗 Total Distance: {total_distance:.2f} km")
+
+    # Folium Map with special markers
+    m = folium.Map(location=coords[0], zoom_start=11)
+
+    for idx, i in enumerate(route_indices):
+        if idx == 0:
+            folium.Marker(
+                coords[i],
+                tooltip=f"{idx+1}: Warehouse",
+                popup=addresses[i],
+                icon=folium.Icon(color="green", icon="home", prefix="fa")
+            ).add_to(m)
+        elif idx == len(route_indices) - 1:
+            folium.Marker(
+                coords[i],
+                tooltip=f"{idx+1}: Return to Warehouse",
+                popup=addresses[i],
+                icon=folium.Icon(color="red", icon="undo", prefix="fa")
+            ).add_to(m)
+        else:
+            folium.Marker(
+                coords[i],
+                tooltip=f"{idx+1}: Stop {idx}",
+                popup=addresses[i],
+                icon=folium.Icon(color="blue", icon="map-marker", prefix="fa")
+            ).add_to(m)
+
+        st_folium(m, width=700, height=500)
     else:
         st.error("Unable to compute optimal route.")
 else:

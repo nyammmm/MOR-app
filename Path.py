@@ -14,7 +14,7 @@ st.title("📦 Optimal Delivery Route in Rizal")
 st.sidebar.markdown("📍 **Enter Delivery Addresses**")
 
 default_addresses = [
-    "San Mateo Public Market, San Mateo, Rizal, Philippines",  # Warehouse
+    "Gulod Malaya, San Mateo, Rizal, Philippines",  # Warehouse
     "SM City Taytay, Taytay, Rizal, Philippines",
     "SM City Masinag, Antipolo, Rizal, Philippines",
     "Robinsons Place Antipolo, Antipolo, Rizal, Philippines",

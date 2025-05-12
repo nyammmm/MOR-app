@@ -117,7 +117,7 @@ if route_indices is None:
     st.error("Could not solve route.")
     st.stop()
 
-ordered_addresses = [addresses[i] for i in route]
+ordered_addresses = [addresses[i] for i in route_indices]
 
 st.subheader("📦 Optimal Route")
 for i, addr in enumerate(ordered_addresses):

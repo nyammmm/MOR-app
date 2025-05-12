@@ -7,7 +7,7 @@ from ortools.constraint_solver import pywrapcp
 from math import radians, sin, cos, sqrt, atan2
 
 st.set_page_config(layout="wide")
-st.title("📦 Optimal Delivery Route in Rizal")
+st.title("📦 Delivery Route Optimization")
 
 # Sidebar layout split into two columns
 with st.sidebar:

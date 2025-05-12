@@ -9,7 +9,12 @@ from math import radians, sin, cos, sqrt, atan2
 st.set_page_config(layout="wide")
 st.title("📦 Optimal Delivery Route in Rizal")
 
-st.sidebar.header("📍 Enter Delivery Addresses and Coordinates")
+# Sidebar layout split into two columns
+with st.sidebar:
+    st.header("📍 Enter Delivery Information")
+    num_locations = st.number_input("Number of Locations", min_value=2, max_value=15, value=5, step=1)
+    if st.button("🔁 Reset to Sample Data"):
+        st.session_state.reset_requested = True
 
 # Sample default data
 sample_addresses = [
@@ -28,9 +33,6 @@ sample_coords = [
     (14.6082, 121.1110),  # Sta Lucia East
 ]
 
-if st.sidebar.button("🔁 Reset to Sample Data"):
-    st.session_state.reset_requested = True
-
 if "reset_requested" not in st.session_state:
     st.session_state.reset_requested = False
 
@@ -40,10 +42,14 @@ if st.session_state.reset_requested:
     st.session_state.lat_inputs = [str(coord[0]) for coord in sample_coords]
     st.session_state.lon_inputs = [str(coord[1]) for coord in sample_coords]
 
-num_locations = st.sidebar.number_input("Number of Locations", min_value=2, max_value=15, value=len(sample_addresses), step=1)
-
 addresses = []
 coords = []
+
+st.sidebar.markdown("### 🗺️ Addresses")
+address_container = st.sidebar.container()
+st.sidebar.markdown("### 🌐 Coordinates")
+coord_container = st.sidebar.container()
+
 for i in range(num_locations):
     default_address = sample_addresses[i] if i < len(sample_addresses) else ""
     default_lat = str(sample_coords[i][0]) if i < len(sample_coords) else ""
@@ -53,9 +59,9 @@ for i in range(num_locations):
     default_lat_input = st.session_state.get("lat_inputs", [default_lat] * num_locations)[i] if len(st.session_state.get("lat_inputs", [])) > i else default_lat
     default_lon_input = st.session_state.get("lon_inputs", [default_lon] * num_locations)[i] if len(st.session_state.get("lon_inputs", [])) > i else default_lon
 
-    address = st.sidebar.text_input(f"Address {i+1}", value=default_address_input, key=f"address_{i}")
-    lat = st.sidebar.text_input(f"Latitude {i+1}", value=default_lat_input, key=f"lat_{i}")
-    lon = st.sidebar.text_input(f"Longitude {i+1}", value=default_lon_input, key=f"lon_{i}")
+    address = address_container.text_input(f"Address {i+1}", value=default_address_input, key=f"address_{i}")
+    lat = coord_container.text_input(f"Latitude {i+1}", value=default_lat_input, key=f"lat_{i}")
+    lon = coord_container.text_input(f"Longitude {i+1}", value=default_lon_input, key=f"lon_{i}")
 
     if address and lat and lon:
         try:
@@ -124,46 +130,45 @@ if len(coords) >= 2:
     distance_matrix = create_distance_matrix(coords)
     route_indices, total_distance = solve_tsp(distance_matrix)
 
-   if route_indices:
-    st.subheader("📦 Optimal Route")
+    if route_indices:
+        st.subheader("📦 Optimal Route")
 
-    for idx, i in enumerate(route_indices):
-        if idx == 0:
-            st.markdown(f"**{idx+1}.** 🏢 **Warehouse**: {addresses[i]}")
-        elif idx == len(route_indices) - 1:
-            st.markdown(f"**{idx+1}.** 🔁 Return to Warehouse: {addresses[i]}")
-        else:
-            st.markdown(f"**{idx+1}.** 📍 Stop {idx}: {addresses[i]}")
+        for idx, i in enumerate(route_indices):
+            if idx == 0:
+                st.markdown(f"**{idx+1}.** 🏢 **Warehouse**: {addresses[i]}")
+            elif idx == len(route_indices) - 1:
+                st.markdown(f"**{idx+1}.** 🔁 Return to Warehouse: {addresses[i]}")
+            else:
+                st.markdown(f"**{idx+1}.** 📍 Stop {idx}: {addresses[i]}")
 
-    st.success(f"🚗 Total Distance: {total_distance:.2f} km")
+        st.success(f"🚗 Total Distance: {total_distance:.2f} km")
 
-    # Folium Map with special markers
-    m = folium.Map(location=coords[0], zoom_start=11)
+        m = folium.Map(location=coords[0], zoom_start=11)
 
-    for idx, i in enumerate(route_indices):
-        if idx == 0:
-            folium.Marker(
-                coords[i],
-                tooltip=f"{idx+1}: Warehouse",
-                popup=addresses[i],
-                icon=folium.Icon(color="green", icon="home", prefix="fa")
-            ).add_to(m)
-        elif idx == len(route_indices) - 1:
-            folium.Marker(
-                coords[i],
-                tooltip=f"{idx+1}: Return to Warehouse",
-                popup=addresses[i],
-                icon=folium.Icon(color="red", icon="undo", prefix="fa")
-            ).add_to(m)
-        else:
-            folium.Marker(
-                coords[i],
-                tooltip=f"{idx+1}: Stop {idx}",
-                popup=addresses[i],
-                icon=folium.Icon(color="blue", icon="map-marker", prefix="fa")
-            ).add_to(m)
+        for idx, i in enumerate(route_indices):
+            if idx == 0:
+                folium.Marker(
+                    coords[i],
+                    tooltip=f"{idx+1}: Warehouse",
+                    popup=addresses[i],
+                    icon=folium.Icon(color="green", icon="home", prefix="fa")
+                ).add_to(m)
+            elif idx == len(route_indices) - 1:
+                folium.Marker(
+                    coords[i],
+                    tooltip=f"{idx+1}: Return to Warehouse",
+                    popup=addresses[i],
+                    icon=folium.Icon(color="red", icon="undo", prefix="fa")
+                ).add_to(m)
+            else:
+                folium.Marker(
+                    coords[i],
+                    tooltip=f"{idx+1}: Stop {idx}",
+                    popup=addresses[i],
+                    icon=folium.Icon(color="blue", icon="map-marker", prefix="fa")
+                ).add_to(m)
 
-    st_folium(m, width=700, height=500)
+        st_folium(m, width=700, height=500)
     else:
         st.error("Unable to compute optimal route.")
 else:

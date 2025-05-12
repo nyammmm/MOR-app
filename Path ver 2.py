@@ -7,7 +7,7 @@ from ortools.constraint_solver import pywrapcp
 from math import radians, sin, cos, sqrt, atan2
 
 st.set_page_config(layout="wide")
-st.title("📦 Optimal Delivery Route 📦")
+st.title("🗺 Optimal Delivery Route 🗺")
 
 # Sidebar layout split into two columns
 with st.sidebar:
@@ -139,7 +139,7 @@ if len(coords) >= 2:
     route_indices, total_distance = solve_tsp(distance_matrix)
 
     if route_indices:
-        st.subheader("📦 Optimal Route")
+        st.subheader("🚚📦 Optimal Route")
 
         for idx, i in enumerate(route_indices):
             if idx == 0:

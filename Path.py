@@ -13,8 +13,8 @@ st.title("📦 Optimal Delivery Route in Rizal")
 # Sidebar for address input
 st.sidebar.markdown("📍 **Enter Delivery Addresses**")
 
-default_addresses = [
-    ("Warehouse (Gulod Malaya, San Mateo, Rizal)", (14.7095, 121.1471)),
+locations = [
+    ("Warehouse (San Mateo)", (14.7095, 121.1471)),
     ("SM City Taytay", (14.5733, 121.1406)),
     ("SM City Masinag", (14.6212, 121.1021)),
     ("Robinsons Place Antipolo", (14.5869, 121.1753)),
@@ -22,81 +22,50 @@ default_addresses = [
     ("Robinsons Metro East", (14.6218, 121.1016)),
     ("SM City San Mateo", (14.6982, 121.1219)),
     ("Vista Mall Antipolo", (14.6068, 121.1761)),
-    ("Shopwise Antipolo", (14.6105, 121.1743)),
+    ("Shopwise Antipolo", (14.6105, 121.1743))
 ]
 
-addresses = []
-for i, default in enumerate(default_addresses):
-    addr = st.sidebar.text_input(f"Address {i+1}", default)
-    addresses.append(addr)
+# Create distance matrix using geodesic distance (in km)
+distance_matrix = []
+for i in range(len(locations)):
+    row = []
+    for j in range(len(locations)):
+        dist = geodesic(locations[i][1], locations[j][1]).km
+        row.append(dist)
+    distance_matrix.append(row)
 
-# Geocode addresses
-geolocator = Nominatim(user_agent="route_optimizer")
-coords = []
-valid_addresses = []
-
-for address in addresses:
-    location = geolocator.geocode(address)
-    if location:
-        coords.append((location.latitude, location.longitude))
-        valid_addresses.append(location.address)
-    else:
-        st.error(f"Could not geocode: {address}")
-        st.stop()
-
-# Distance matrix using geodesic distance
-def compute_distance_matrix(coords):
-    n = len(coords)
-    matrix = []
-    for i in range(n):
-        row = []
-        for j in range(n):
-            if i == j:
-                row.append(0)
-            else:
-                dist = geodesic(coords[i], coords[j]).km
-                row.append(dist)
-        matrix.append(row)
-    return matrix
-
-# TSP Solver using OR-Tools
+# Solve TSP using OR-Tools
 def solve_tsp(distance_matrix):
-    n = len(distance_matrix)
-    manager = pywrapcp.RoutingIndexManager(n, 1, 0)  # start and end at node 0
+    manager = pywrapcp.RoutingIndexManager(len(distance_matrix), 1, 0)  # start and end at 0
     routing = pywrapcp.RoutingModel(manager)
 
-    def distance_callback(from_idx, to_idx):
-        from_node = manager.IndexToNode(from_idx)
-        to_node = manager.IndexToNode(to_idx)
-        return int(distance_matrix[from_node][to_node] * 1000)  # convert to meters
+    def distance_callback(from_index, to_index):
+        return int(distance_matrix[manager.IndexToNode(from_index)][manager.IndexToNode(to_index)] * 1000)
 
     transit_callback_index = routing.RegisterTransitCallback(distance_callback)
     routing.SetArcCostEvaluatorOfAllVehicles(transit_callback_index)
 
-    # Make it return to the starting point
-    routing.SetRoutingStrategy(routing_enums_pb2.RoutingStrategy.GLOBAL_CHEAPEST_ARC)
     search_parameters = pywrapcp.DefaultRoutingSearchParameters()
     search_parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
 
     solution = routing.SolveWithParameters(search_parameters)
 
-    if solution:
-        index = routing.Start(0)
-        route = []
-        total_distance = 0
-        while not routing.IsEnd(index):
-            node_index = manager.IndexToNode(index)
-            route.append(node_index)
-            previous_index = index
-            index = solution.Value(routing.NextVar(index))
-            total_distance += routing.GetArcCostForVehicle(previous_index, index, 0)
-        route.append(manager.IndexToNode(index))
-        return route, total_distance / 1000  # convert back to km
-    else:
-        st.error("No solution found for route optimization.")
-        st.stop()
+    if not solution:
+        raise Exception("No solution found!")
 
-# Compute route
+    # Get route
+    index = routing.Start(0)
+    route = []
+    total_distance = 0
+    while not routing.IsEnd(index):
+        route.append(manager.IndexToNode(index))
+        next_index = solution.Value(routing.NextVar(index))
+        total_distance += routing.GetArcCostForVehicle(index, next_index, 0)
+        index = next_index
+    route.append(manager.IndexToNode(index))
+
+    return route, total_distance / 1000  # Convert to km
+
 distance_matrix = compute_distance_matrix(coords)
 route, total_distance = solve_tsp(distance_matrix)
 ordered_addresses = [valid_addresses[i] for i in route]

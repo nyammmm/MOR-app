@@ -13,11 +13,15 @@ st.title("🗺️ Optimal Delivery Route 🗺️")
 st.sidebar.header("📍 Enter Delivery Addresses")
 
 default_addresses = [
-    "Antipolo Cathedral, Antipolo, Rizal, Philippines",
-    "Hinulugang Taktak, Antipolo, Rizal, Philippines",
-    "Pinto Art Museum, Antipolo, Rizal, Philippines",
+    "Warehouse, San Mateo, Rizal, Philippines",  # Starting point
     "SM City Taytay, Taytay, Rizal, Philippines",
-    "Angono-Binangonan Petroglyphs, Binangonan, Rizal, Philippines"
+    "SM City Masinag, Antipolo, Rizal, Philippines",
+    "Robinsons Place Antipolo, Antipolo, Rizal, Philippines",
+    "Sta. Lucia East Grand Mall, Cainta, Rizal, Philippines",
+    "SM City San Mateo, San Mateo, Rizal, Philippines",
+    "Ayala Malls Feliz, Marikina, Philippines",
+    "Robinsons Metro East, Pasig, Philippines",
+    "Vista Mall Antipolo, Antipolo, Rizal, Philippines"
 ]
 
 addresses = []

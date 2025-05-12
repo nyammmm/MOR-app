@@ -20,9 +20,7 @@ default_addresses = [
     "Robinsons Place Antipolo, Antipolo, Rizal, Philippines",
     "Sta. Lucia East Grand Mall, Cainta, Rizal, Philippines",
     "SM City San Mateo, San Mateo, Rizal, Philippines",
-    "Ayala Malls Feliz, Marikina, Philippines",
-    "Robinsons Metro East, Pasig, Philippines",
-    "Vista Mall Antipolo, Antipolo, Rizal, Philippines"
+    "Ayala Malls Feliz, Marikina, Philippines"
 ]
 
 addresses = []

@@ -77,7 +77,7 @@ def solve_tsp(distance_matrix):
     from ortools.constraint_solver import routing_enums_pb2
     from ortools.constraint_solver import pywrapcp
 
-    manager = pywrapcp.RoutingIndexManager(len(distance_matrix), 1, 0)  # start and end at node 0
+    manager = pywrapcp.RoutingIndexManager(len(distance_matrix), 1, 0, 0)
     routing = pywrapcp.RoutingModel(manager)
 
     def distance_callback(from_index, to_index):

@@ -6,31 +6,7 @@ from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
 from math import radians, sin, cos, sqrt, atan2
 
-st.set_page_config(layout="wide", page_title="Optimal Delivery Route", page_icon="📦")
-st.markdown("""
-    <style>
-        .stApp {
-            background-color: #0e1117;
-            color: white;
-        }
-        .reportview-container .main .block-container {
-            padding: 2rem;
-        }
-        .stTextInput>div>div>input {
-            background-color: #262730;
-            color: white;
-        }
-        .stNumberInput>div>div>input {
-            background-color: #262730;
-            color: white;
-        }
-        .stButton>button {
-            background-color: #4CAF50;
-            color: white;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
+st.set_page_config(layout="wide")
 st.title("📦 Optimal Delivery Route in Rizal")
 
 st.sidebar.header("📍 Enter Delivery Addresses and Coordinates")
@@ -77,9 +53,9 @@ for i in range(num_locations):
     default_lat_input = st.session_state.get("lat_inputs", [default_lat] * num_locations)[i] if len(st.session_state.get("lat_inputs", [])) > i else default_lat
     default_lon_input = st.session_state.get("lon_inputs", [default_lon] * num_locations)[i] if len(st.session_state.get("lon_inputs", [])) > i else default_lon
 
-    address = st.sidebar.text_input(f"📌 Address {i+1}", value=default_address_input, key=f"address_{i}")
-    lat = st.sidebar.text_input(f"🧭 Latitude {i+1}", value=default_lat_input, key=f"lat_{i}")
-    lon = st.sidebar.text_input(f"🧭 Longitude {i+1}", value=default_lon_input, key=f"lon_{i}")
+    address = st.sidebar.text_input(f"Address {i+1}", value=default_address_input, key=f"address_{i}")
+    lat = st.sidebar.text_input(f"Latitude {i+1}", value=default_lat_input, key=f"lat_{i}")
+    lon = st.sidebar.text_input(f"Longitude {i+1}", value=default_lon_input, key=f"lon_{i}")
 
     if address and lat and lon:
         try:
@@ -88,13 +64,13 @@ for i in range(num_locations):
             addresses.append(address)
             coords.append((lat, lon))
         except ValueError:
-            st.sidebar.error(f"❌ Invalid coordinates for Address {i+1}")
+            st.sidebar.error(f"Invalid coordinates for Address {i+1}")
 
 # Haversine distance calculator
 def haversine(coord1, coord2):
     R = 6371.0
     lat1, lon1 = radians(coord1[0]), radians(coord1[1])
-    lat2, lon2 = radians(coord2[0]), radians(coord2[1])
+    lat2, lon2 = radians(coord2[0]), coord2[1]
     dlon = lon2 - lon1
     dlat = lat2 - lat1
 
@@ -149,8 +125,7 @@ if len(coords) >= 2:
     route_indices, total_distance = solve_tsp(distance_matrix)
 
     if route_indices:
-        st.markdown("## 📍 Optimal Route")
-        st.markdown("<div style='padding:10px; background-color:#1f6f8b; color:white; border-radius:8px;'>🧾 <strong>Delivery Stops:</strong></div>", unsafe_allow_html=True)
+        st.subheader("📦 Optimal Route")
         for idx, i in enumerate(route_indices):
             if idx == 0:
                 st.markdown(f"**{idx+1}.** {addresses[i]} 🏁 (Start)")
@@ -161,15 +136,11 @@ if len(coords) >= 2:
 
         st.success(f"🚗 Total Distance: {total_distance:.2f} km")
 
-        m = folium.Map(location=coords[0], zoom_start=11, tiles="CartoDB dark_matter")
+        m = folium.Map(location=coords[0], zoom_start=11)
         for idx, i in enumerate(route_indices):
-            folium.Marker(
-                coords[i],
-                tooltip=f"{idx+1}: {addresses[i]}",
-                icon=folium.Icon(color="lightblue", icon="truck", prefix="fa")
-            ).add_to(m)
+            folium.Marker(coords[i], tooltip=f"{idx+1}: {addresses[i]}").add_to(m)
         st_folium(m, width=700, height=500)
     else:
-        st.error("❌ Unable to compute optimal route.")
+        st.error("Unable to compute optimal route.")
 else:
-    st.info("ℹ️ Please input at least 2 valid addresses with coordinates.")
+    st.info("Please input at least 2 valid addresses with coordinates.")

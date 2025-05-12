@@ -77,19 +77,16 @@ def solve_tsp(distance_matrix):
     from ortools.constraint_solver import routing_enums_pb2
     from ortools.constraint_solver import pywrapcp
 
-    manager = pywrapcp.RoutingIndexManager(len(distance_matrix), 1, 0, 0)
+    manager = pywrapcp.RoutingIndexManager(len(distance_matrix), 1, 0)  # Start at node 0
     routing = pywrapcp.RoutingModel(manager)
 
     def distance_callback(from_index, to_index):
         from_node = manager.IndexToNode(from_index)
         to_node = manager.IndexToNode(to_index)
-        return int(distance_matrix[from_node][to_node] * 1000)  # convert km to meters
+        return int(distance_matrix[from_node][to_node] * 1000)
 
     transit_callback_index = routing.RegisterTransitCallback(distance_callback)
     routing.SetArcCostEvaluatorOfAllVehicles(transit_callback_index)
-
-    # Force round trip
-    routing.SetStartEnd(0, 0)
 
     search_parameters = pywrapcp.DefaultRoutingSearchParameters()
     search_parameters.first_solution_strategy = (
@@ -100,14 +97,19 @@ def solve_tsp(distance_matrix):
     if solution:
         index = routing.Start(0)
         route = []
+        route_distance = 0
         while not routing.IsEnd(index):
-            route.append(manager.IndexToNode(index))
+            node = manager.IndexToNode(index)
+            route.append(node)
+            previous_index = index
             index = solution.Value(routing.NextVar(index))
-        route.append(manager.IndexToNode(index))  # return to depot
-        return route
-    else:
-        return None
+            route_distance += routing.GetArcCostForVehicle(previous_index, index, 0)
 
+        # Complete the round trip manually by returning to start
+        route.append(route[0])
+        return route, route_distance / 1000  # convert back to km
+    else:
+        return None, 0
 
 route_indices, total_distance = solve_tsp(distance_matrix)
 

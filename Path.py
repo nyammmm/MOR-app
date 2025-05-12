@@ -59,8 +59,8 @@ for i in range(num_locations):
 
     if address and lat and lon:
         try:
-            lat = float(lat)
-            lon = float(lon)
+            lat = round(float(lat), 6)
+            lon = round(float(lon), 6)
             addresses.append(address)
             coords.append((lat, lon))
         except ValueError:

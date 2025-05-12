@@ -13,7 +13,7 @@ st.title("🗺️ Optimal Delivery Route 🗺️")
 st.sidebar.header("📍 Enter Delivery Addresses")
 
 default_addresses = [
-    "Warehouse, San Mateo, Rizal, Philippines",  # Starting point
+    "Gulod Malaya, San Mateo, Rizal, Philippines",  # Starting point
     "SM City Taytay, Taytay, Rizal, Philippines",
     "SM City Masinag, Antipolo, Rizal, Philippines",
     "Robinsons Place Antipolo, Antipolo, Rizal, Philippines",

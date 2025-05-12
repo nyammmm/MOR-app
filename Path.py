@@ -12,7 +12,7 @@ st.title("📦 Optimal Delivery Route in Rizal")
 # Sidebar layout split into two columns
 with st.sidebar:
     st.header("📍 Enter Delivery Information")
-    num_locations = st.number_input("Number of Locations", min_value=2, max_value=15, value=5, step=1)
+    num_locations = st.number_input("Number of Locations", min_value=2, max_value=15, value=9, step=1)
     if st.button("🔁 Reset to Sample Data"):
         st.session_state.reset_requested = True
 

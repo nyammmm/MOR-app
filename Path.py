@@ -6,8 +6,8 @@ from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
 import time
 
-st.set_page_config(page_title="TSP Optimized Route Planner", layout="wide")
-st.title("🗺️ Optimal Delivery Route Without Google Maps")
+st.set_page_config(page_title="Optimized Route Planner", layout="wide")
+st.title("🗺️ Optimal Delivery Route 🗺️")
 
 # Sidebar for addresses
 st.sidebar.header("📍 Enter Delivery Addresses")
@@ -92,7 +92,8 @@ def solve_tsp(distance_matrix):
         route = []
         total_dist = 0
         while not routing.IsEnd(index):
-            route.append(manager.IndexToNode(index))
+            route.append(manager.IndexToNode(index))  # End node
+            route.append(0)  # Explicitly return to start (node 0)
             prev_index = index
             index = solution.Value(routing.NextVar(index))
             total_dist += routing.GetArcCostForVehicle(prev_index, index, 0)
@@ -110,7 +111,13 @@ ordered_addresses = [addresses[i] for i in route_indices]
 
 st.subheader("📦 Optimal Route")
 for i, addr in enumerate(ordered_addresses):
-    st.markdown(f"{i+1}. {addr}")
+    label = f"{i+1}. {addr}"
+    if i == 0:
+        label += " 🏁 (Start)"
+    elif i == len(ordered_addresses) - 1:
+        label += " 🔁 (Return)"
+    st.markdown(label)
+
 st.success(f"🚗 Total Distance: {total_distance:.2f} km")
 
 # Map visualization

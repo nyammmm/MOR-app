@@ -163,7 +163,7 @@ if len(coords) >= 2:
                 icon=folium.Icon(color="blue", icon="map-marker", prefix="fa")
             ).add_to(m)
 
-        st_folium(m, width=700, height=500)
+    st_folium(m, width=700, height=500)
     else:
         st.error("Unable to compute optimal route.")
 else:

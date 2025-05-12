@@ -14,11 +14,15 @@ st.title("📦 Optimal Delivery Route in Rizal")
 st.sidebar.markdown("📍 **Enter Delivery Addresses**")
 
 default_addresses = [
-    "Gulod Malaya, San Mateo, Rizal, Philippines",  # Warehouse
-    "SM City Taytay, Taytay, Rizal, Philippines",
-    "SM City Masinag, Antipolo, Rizal, Philippines",
-    "Robinsons Place Antipolo, Antipolo, Rizal, Philippines",
-    "Sta. Lucia East Grand Mall, Cainta, Rizal, Philippines"
+    ("Warehouse (Gulod Malaya, San Mateo, Rizal)", (14.7095, 121.1471)),
+    ("SM City Taytay", (14.5733, 121.1406)),
+    ("SM City Masinag", (14.6212, 121.1021)),
+    ("Robinsons Place Antipolo", (14.5869, 121.1753)),
+    ("Sta. Lucia East Grand Mall", (14.6096, 121.1027)),
+    ("Robinsons Metro East", (14.6218, 121.1016)),
+    ("SM City San Mateo", (14.6982, 121.1219)),
+    ("Vista Mall Antipolo", (14.6068, 121.1761)),
+    ("Shopwise Antipolo", (14.6105, 121.1743)),
 ]
 
 addresses = []

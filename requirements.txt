@@ -4,5 +4,5 @@ folium
 streamlit-folium
 ortools
 pillow
-tensorflow
+tensorflow==2.14.0
 numpy

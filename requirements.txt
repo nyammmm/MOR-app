@@ -1,7 +1,5 @@
+pip>=25.1.1
 streamlit
-pandas
-folium
-streamlit-folium
-ortools
+tensorflow>=2.10,<3
+pillow
 numpy
-tensorflow

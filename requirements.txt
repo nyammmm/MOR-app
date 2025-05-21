@@ -4,5 +4,5 @@ folium
 streamlit-folium
 ortools
 pillow
-tensorflow>=2.13,<2.15
 numpy
+tensorflow

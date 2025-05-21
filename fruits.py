@@ -10,7 +10,7 @@ def load_model():
     return tf.keras.models.load_model('fruit_classifier_model.h5')
 
 model = load_model()
-class_names = ['Apples', 'Grapes', 'Pineapple', 'Orange', 'Strawberry']
+class_names = ['Apples', 'Grapes', 'Orange', 'Pineapple', 'Strawberry']
 
 st.title("🍌Fruit Image Classifier")
 st.write("Upload an image to classify the fruit.")

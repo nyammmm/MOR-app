@@ -2,3 +2,6 @@ streamlit
 tensorflow
 pillow
 numpy
+ortools
+folium
+math

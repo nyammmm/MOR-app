@@ -1,45 +1,52 @@
 import streamlit as st
+import tensorflow as tf
 import numpy as np
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
-from PIL import Image
+from PIL import Image, ImageOps
 
-# Load the trained model
-model = load_model('fruit_classifier_model.keras')
+st.set_page_config(page_title="🍏Fruit Classification🍐", layout="centered")
 
-# Define class names and corresponding emojis
-class_names = ['apple', 'banana', 'mango', 'orange', 'strawberry']
-class_emojis = {
-    'apple': '🍎',
-    'banana': '🍌',
-    'mango': '🥭',
-    'orange': '🍊',
-    'strawberry': '🍓'
-}
+@st.cache_resource
+def load_model():
+    return tf.keras.models.load_model('fruit_classifier_model.keras')
 
-# Set up Streamlit app
-st.title("🍎🍌🍊 Fruit Image Classifier")
-st.write("Upload an image of a fruit.")
+model = load_model()
+class_names = ['Apples', 'Grapes', 'Pineapple', 'Orange', 'Strawberry']
 
-# File uploader
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+st.title("🍌Fruit Image Classifier")
+st.write("Upload an image to classify the fruit.")
 
-if uploaded_file is not None:
-    # Display the uploaded image
-    img = Image.open(uploaded_file)
-    st.image(img, caption='Uploaded Image.', use_column_width=True)
+file = st.file_uploader("📸 Upload a fruit image", type=["jpg", "jpeg", "png", "bmp"])
 
-    # Preprocess the image
-    img = img.resize((128, 128))
-    img_array = image.img_to_array(img) / 255.0
+def import_and_predict(image_data, model):
+    size = model.input_shape[1:3]  # Resize to match model input
+    image = ImageOps.fit(image_data, size, Image.LANCZOS)
+    img_array = np.asarray(image).astype('float32') / 255.0
     img_array = np.expand_dims(img_array, axis=0)
-
-    # Make prediction
     prediction = model.predict(img_array)
-    predicted_class = class_names[np.argmax(prediction)]
-    confidence = np.max(prediction) * 100
-    emoji = class_emojis.get(predicted_class, '')
+    return prediction
 
-    # Display prediction
-    st.markdown(f"### 🧠 Prediction: **{predicted_class.capitalize()} {emoji}**")
-    st.markdown(f"**Confidence:** {confidence:.2f}%")
+if file is None:
+    st.info("🖼️ Please upload a fruit image to proceed.")
+else:
+    image = Image.open(file).convert('RGB')
+    st.image(image, caption="Uploaded Image", use_container_width=True)
+
+    with st.spinner("🔍 Classifying Fruit..."):
+        prediction = import_and_predict(image, model)
+
+    predicted_index = int(np.argmax(prediction))
+    predicted_class = class_names[predicted_index]
+    confidence = round(100 * np.max(prediction), 2)
+
+    st.markdown(f"### 🌈 Predicted Fruit: **{predicted_class}**")
+
+    if predicted_class == 'Apple':
+        st.warning("🍎 Apples are a good source of fiber and low in calories, making them a heart-healthy snack.")
+    elif predicted_class == 'Grapes':
+        st.success("🍇 Grapes are rich in antioxidants, particularly resveratrol, which supports heart and brain health.")
+    elif predicted_class == 'Cloudy':
+        st.info("🍍 Pineapples are packed with vitamin C and bromelain, aiding immunity and digestion.")
+    elif predicted_class == 'Sunrise':
+        st.info("🍊 Oranges are loaded with vitamin C, supporting immune function and skin health.")
+    elif predicted_class == 'Sunrise':
+        st.info("🍓 Strawberries are low in calories but high in vitamin C, fiber, and powerful antioxidants.")

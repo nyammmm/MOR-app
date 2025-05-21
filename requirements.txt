@@ -4,4 +4,3 @@ pillow
 numpy
 ortools
 folium
-math

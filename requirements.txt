@@ -3,5 +3,5 @@ tensorflow
 pillow
 numpy
 ortools
-folium==1.21
+folium
 math

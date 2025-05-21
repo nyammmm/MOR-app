@@ -3,6 +3,5 @@ pandas
 folium
 streamlit-folium
 ortools
-pillow
 numpy
 tensorflow

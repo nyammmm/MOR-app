@@ -4,3 +4,4 @@ pillow
 numpy
 ortools
 folium
+streamlit-folium

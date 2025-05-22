@@ -41,7 +41,7 @@ else:
     st.markdown(f"### 🌈 Predicted Fruit: **{predicted_class}**")
 
     if predicted_class == 'Apples':
-        st.warning("🍎 Apples are a good source of fiber and low in calories, making them a heart-healthy snack.")
+        st.warning("🍎 An apple a day, keeps the doctor away.")
     elif predicted_class == 'Grapes':
         st.success("🍇 Grapes are rich in antioxidants, particularly resveratrol, which supports heart and brain health.")
     elif predicted_class == 'Pineapple':

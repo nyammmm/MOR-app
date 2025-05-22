@@ -40,13 +40,13 @@ else:
 
     st.markdown(f"### 🌈 Predicted Fruit: **{predicted_class}**")
 
-    if predicted_class == 'Apple':
+    if predicted_class == 'Apples':
         st.warning("🍎 Apples are a good source of fiber and low in calories, making them a heart-healthy snack.")
     elif predicted_class == 'Grapes':
         st.success("🍇 Grapes are rich in antioxidants, particularly resveratrol, which supports heart and brain health.")
-    elif predicted_class == 'Cloudy':
+    elif predicted_class == 'Pineapple':
         st.info("🍍 Pineapples are packed with vitamin C and bromelain, aiding immunity and digestion.")
-    elif predicted_class == 'Sunrise':
+    elif predicted_class == 'Orange':
         st.info("🍊 Oranges are loaded with vitamin C, supporting immune function and skin health.")
-    elif predicted_class == 'Sunrise':
+    elif predicted_class == 'Strawberry':
         st.info("🍓 Strawberries are low in calories but high in vitamin C, fiber, and powerful antioxidants.")

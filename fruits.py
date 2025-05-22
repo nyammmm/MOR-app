@@ -39,7 +39,7 @@ else:
     confidence = round(100 * np.max(prediction), 2)
 
     st.markdown(f"### 🌈 Predicted Fruit: **{predicted_class}**")
-    st.markdown(f"### Confidence Level: **{confidence %2}**")
+    st.markdown(f"### Confidence Level: **{round(confidence % 2, 2)}**")
 
     if predicted_class == 'Apples':
         st.warning("🍎 An apple a day, keeps the doctor away.")

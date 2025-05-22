@@ -7,7 +7,7 @@ st.set_page_config(page_title="🍏Fruit Classification🍐", layout="centered")
 
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model('fruit_classifier_model.h5')
+    return tf.keras.models.load_model('fruit_classifier_model.keras')
 
 model = load_model()
 class_names = ['Apple', 'Grapes', 'Orange', 'Pineapple', 'Strawberry']

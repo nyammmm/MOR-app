@@ -10,7 +10,7 @@ def load_model():
     return tf.keras.models.load_model('fruit_classifier_model.h5')
 
 model = load_model()
-class_names = ['Apples', 'Grapes', 'Orange', 'Pineapple', 'Strawberry']
+class_names = ['Apple', 'Grapes', 'Orange', 'Pineapple', 'Strawberry']
 
 st.title("🍌Fruit Image Classifier")
 st.write("Upload an image to classify the fruit.")
@@ -41,13 +41,13 @@ else:
     st.markdown(f"### 🌈 Predicted Fruit: **{predicted_class}**")
     st.markdown(f"### Confidence Level: **{confidence:.2f}%**")
 
-    if predicted_class == 'Apples':
+    if predicted_class == 'Apple':
         st.warning("🍎 An apple a day, keeps the doctor away.")
     elif predicted_class == 'Grapes':
-        st.success("🍇 Grapes are rich in antioxidants, particularly resveratrol, which supports heart and brain health.")
+        st.success("🍇 A grapes a day, keeps the doctor away.")
     elif predicted_class == 'Pineapple':
-        st.info("🍍 Pineapples are packed with vitamin C and bromelain, aiding immunity and digestion.")
+        st.info("🍍 A pineapple a day, keeps the doctor away.")
     elif predicted_class == 'Orange':
-        st.info("🍊 Oranges are loaded with vitamin C, supporting immune function and skin health.")
+        st.info("🍊 An orange a day, keeps the doctor away.")
     elif predicted_class == 'Strawberry':
-        st.info("🍓 Strawberries are low in calories but high in vitamin C, fiber, and powerful antioxidants.")
+        st.info("🍓 A strawberry a day, keeps the doctor away.")
